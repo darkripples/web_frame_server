@@ -19,7 +19,6 @@ flog = fls_log(handler_name="app_blog.views")
 from .models import SQL_DIC_TYPE, SQL_DIC_BLOG, SQL_DIC_PARAM
 from . import app_name
 
-from conf import SET_TITLE_CMD
 from app_dr.dr_utils import add_visitor, req_invalid_check
 
 from conf import PAGE_DEFAULT_LIMIT, SET_TITLE_CMD
@@ -157,7 +156,6 @@ def titleValue(req):
     :return:
     """
     ret = ResModel()
-    ret.msg = req_invalid_check(req)
     ret.msg = req_invalid_check(req)
     if ret.msg:
         # 请求合法性校验不通过
