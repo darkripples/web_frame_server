@@ -1,4 +1,4 @@
-# Web-Frame
+# Web-Frame-Server
 django2的一个web应用,数据库使用postgresql
 
 ## 依赖
