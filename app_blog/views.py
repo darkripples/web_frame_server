@@ -49,7 +49,7 @@ def indexList(req):
     # todo 权限level的控制
     # 采用源生sql，方便where条件和分页,后期计划加入用户表的关联查询
     sql = "select a.{table1_id},a.{table1_title},b.{table2_type_name},a.{table1_tags},a.{table1_notes},a.{table1_aname}," \
-          "to_char(a.{table1_atime}, 'yyyy-mm-dd hh24:mi:ss') as {table1_atime}, {table1_rlevel}  " \
+          "to_char(a.{table1_atime}, 'yyyy-mm-dd hh24:mi:ss') as {table1_atime}, a.{table1_rlevel},a.{table1_rcnt}  " \
           "from {table1} a, {table2} b where a.{table1_type_id}=b.{table2_type_id} and a.{table1_rcnt}>=0".format(
         **SQL_DIC_BLOG)
     sql_count = "select count(1) as cnt " \
@@ -109,7 +109,7 @@ def contentDetail(req, id):
     # 为了统一，驼峰命名，采用原生sql
     with connection() as con:
         rs = con.execute_sql(
-            "select {table1_id},{table1_title},{table1_content}," \
+            "select {table1_id},{table1_title},{table1_content},{table1_rcnt}," \
             "to_char({table1_atime}, 'yyyy-mm-dd hh24:mi:ss') as {table1_atime},{table1_notes},{table1_bgurl},{table1_rlevel} " \
             "from {table1} where {table1_id}=%(id)s and {table1_rcnt}>=0".format(**SQL_DIC_BLOG),
             {"id": id}, dicorobj="dict")

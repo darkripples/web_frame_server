@@ -34,6 +34,11 @@ def ip_into_int(ip):
 
 
 def is_internal_ip(ip):
+    """
+    判断是否为内网ip
+    :param ip:
+    :return:
+    """
     ip = ip_into_int(ip)
     net_a = ip_into_int('10.255.255.255') >> 24
     net_b = ip_into_int('172.31.255.255') >> 20

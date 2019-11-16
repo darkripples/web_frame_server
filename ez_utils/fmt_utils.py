@@ -123,6 +123,15 @@ def formatter(src: str, firstUpper: bool = False):
         res = res[0].lower() + res[1:]
     return res
 
+def allot_list(src_list: list, n: int) -> list:
+    """
+    根据给定的组数，分配list给每一组-顺序分组
+    :param src_list: 源list
+    :param n: 每n个分一组
+    :return:
+    """
+    return [src_list[i:i + n] for i in range(0, len(src_list), n)]
+
 def help(num = '①'):
     print(num + "关于格式化")
     print("\tfNull(obj)")

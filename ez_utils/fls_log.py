@@ -22,7 +22,7 @@ def _get_msg4log(*args):
         else:
             msg = ''
     except:
-        pass
+        msg = str(args)
     return msg
 
 
@@ -85,6 +85,14 @@ class Fls_Log:
 
 
 def fls_log(log_filepath=None, file_name='darkripples', handler_name='root', show_console=True):
+    """
+    实例化
+    :param log_filepath:
+    :param file_name:
+    :param handler_name:
+    :param show_console:
+    :return:
+    """
     return Fls_Log(log_filepath=log_filepath, file_name=file_name, handler_name=handler_name, show_console=show_console)
 
 
