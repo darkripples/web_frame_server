@@ -2,7 +2,9 @@
 """ Some Func About 'file' """
 # 2019/5/18
 
-import os, glob, base64
+import base64
+import glob
+import os
 
 
 def read_in_chunks(file_path: str, chunk_size=1024 * 1024):

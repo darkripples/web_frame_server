@@ -6,10 +6,10 @@
 # @Desc: 定义异常信息
 """
 
-import traceback, os
-from ez_utils import fls_log
+import os
+import traceback
 
-flog = fls_log(handler_name="")
+from ez_utils import fls_log
 
 
 def err_check(f):
@@ -23,6 +23,7 @@ def err_check(f):
         try:
             return f(*args, **kwargs)
         except Exception as e:
+            flog = fls_log(handler_name="")
             flog.log_error(os.path.relpath(f.__globals__['__file__']) + "." + f.__name__, traceback.format_exc())
             return None
 

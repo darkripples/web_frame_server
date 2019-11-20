@@ -1,10 +1,16 @@
 # coding:utf8
+
+"""
 ## Some Func About 'Write Log'
 ## Use: flog or fls_log(log_file)
 # 2016/6/7 Add fls_log()
 # 2019/10/24 重构
+# 2019/11/20 优化 无handler_name的情况
+"""
 
-import logging, os
+import logging
+import os
+
 from .date_utils import fmt_date, FMT_DATE
 
 
@@ -26,10 +32,10 @@ def _get_msg4log(*args):
     return msg
 
 
-class Fls_Log:
+class FlsLog:
     # Write LOG
     def __init__(self, log_filepath=None, file_name=None, date_name=fmt_date(fmt=FMT_DATE)[:8],
-                 handler_name='root', log_level=logging.DEBUG, show_console=True):
+                 handler_name='root', log_level=logging.DEBUG, show_console=True, write_file=True):
         if not log_filepath:
             log_filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs")
         if not os.path.exists(log_filepath):
@@ -39,31 +45,36 @@ class Fls_Log:
 
         self.log_filepath = os.path.join(log_filepath, file_name + '.log.' + date_name)
 
-        self.logger = logging.getLogger(handler_name)
+        self.logger = logging.getLogger(handler_name or "MAIN")
         self.handlers = self.logger.handlers
 
+        self.logger.setLevel(log_level)
+
+        # 设置输出日志格式
+        fmt_tmp = "%(asctime)s %(levelname)s %(name)s %(message)s"
+        if not handler_name:
+            # 无handler_name的话，也去掉%(name)s，否则会写为root
+            fmt_tmp = "%(asctime)s %(levelname)s %(message)s"
+        formatter = logging.Formatter(
+            fmt=fmt_tmp,
+            # 时间格式采用默认的，显性记录下datefmt
+            datefmt=None
+        )
+
         if not self.handlers:
-            fh = logging.FileHandler(self.log_filepath, encoding="utf-8")
-            ch = logging.StreamHandler()
-
-            # 设置输出日志格式
-            fmt = "%(asctime)s %(levelname)s %(message)s"
-            if handler_name:
-                fmt = "%(asctime)s %(levelname)s %(name)s %(message)s"
-            formatter = logging.Formatter(
-                fmt=fmt,
-                datefmt=None
-            )
-
-            # 为handler指定输出格式
-            fh.setFormatter(formatter)
-            ch.setFormatter(formatter)
-            # 为logger添加的日志处理器
-            self.logger.addHandler(fh)
+            if write_file:
+                fh = logging.FileHandler(self.log_filepath, encoding="utf-8")
+                # 为handler指定输出格式
+                fh.setFormatter(formatter)
+                # 为logger添加的日志处理器
+                self.logger.addHandler(fh)
             if show_console:
+                # 显示控制台输出
+                ch = logging.StreamHandler()
+                # 为handler指定输出格式
+                ch.setFormatter(formatter)
+                # 为logger添加的日志处理器
                 self.logger.addHandler(ch)
-
-            self.logger.setLevel(log_level)
 
             self.handlers = self.logger.handlers
 
@@ -84,16 +95,18 @@ class Fls_Log:
         self.logger.error(_get_msg4log(*args))
 
 
-def fls_log(log_filepath=None, file_name='darkripples', handler_name='root', show_console=True):
+def fls_log(log_filepath=None, file_name='darkripples', handler_name='root', show_console=True, write_file=True):
     """
     实例化
     :param log_filepath:
     :param file_name:
     :param handler_name:
     :param show_console:
+    :param write_file:
     :return:
     """
-    return Fls_Log(log_filepath=log_filepath, file_name=file_name, handler_name=handler_name, show_console=show_console)
+    return FlsLog(log_filepath=log_filepath, file_name=file_name, handler_name=handler_name, show_console=show_console,
+                  write_file=write_file)
 
 
 if __name__ == '__main__':

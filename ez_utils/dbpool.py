@@ -1,12 +1,15 @@
 # coding:utf8
 # V1.0   2015/5/24 10:25  by fls
 
+import _thread
 import re
-import threading, _thread
+import threading
+
 import psycopg2 as db2api
+
+from conf import configs
 from .attrdict import AttrDict
 from .fmt_utils import formatter
-from conf import configs
 
 DB_TYPE = configs.DB_TYPE
 
@@ -270,7 +273,7 @@ class ResultSet(object):
                 self.__cursor.execute(sql.encode(encoding) if encoding else sql, params)
             else:
                 self.__cursor.execute(sql.encode(encoding) if encoding else sql)
-            if self.__cursor.description == None:
+            if self.__cursor.description is None:
                 return
         except:
             raise
