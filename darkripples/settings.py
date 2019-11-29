@@ -75,8 +75,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 自定义的中间件
-    'darkripples.middleware.except_middleware.ExceptMiddleware',
+]
+
+MIDDLEWARE += [
+    # 自定义的中间件.必须放在最后
+    'darkripples.middleware.dr_middleware.DRMiddleware',
 ]
 
 ROOT_URLCONF = 'darkripples.urls'

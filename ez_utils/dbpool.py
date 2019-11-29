@@ -1,5 +1,15 @@
+#!/usr/bin/env python
 # coding:utf8
-# V1.0   2015/5/24 10:25  by fls
+"""
+@Time       :   2015/5/24
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   fls易用性utils-数据库连接池相关utils
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2015/5/24 10:25   fls        1.0         create
+"""
 
 import _thread
 import re

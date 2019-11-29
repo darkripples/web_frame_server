@@ -1,14 +1,21 @@
+#!/usr/bin/env python
 # coding:utf8
+"""
+@Time       :   2019/8/30
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   blog相关
 
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2019/8/30 14:53   fls        1.0         create
 """
-# @Time : 2019/8/30 14:53
-# @Author : fls
-# @Desc: blog相关
-"""
+
 import traceback
 
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
+from django.apps import apps
 
 from ez_utils.models import ResPageModel, ResModel
 from ez_utils import connection, get_ip
@@ -17,7 +24,6 @@ from ez_utils import fls_log
 flog = fls_log(handler_name="app_blog.views")
 
 from .models import SQL_DIC_TYPE, SQL_DIC_BLOG, SQL_DIC_PARAM
-from . import app_name
 
 from app_dr.dr_utils import add_visitor, req_invalid_check
 
@@ -93,7 +99,7 @@ def contentDetail(req, id):
     v_cnt = 0
     try:
         ip = get_ip(req)
-        v_cnt = add_visitor(ip, app_name, 'read', id)
+        v_cnt = add_visitor(ip, apps.get_app_config('app_blog').name, 'read', id)
     except:
         flog.log_error("记录访客信息失败:%s", traceback.format_exc())
 

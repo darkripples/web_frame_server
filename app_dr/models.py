@@ -1,7 +1,21 @@
+#!/usr/bin/env python
+# coding:utf8
+"""
+@Time       :   2019/09/02
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   darkripples总平台相关
+                # python manage.py makemigrations
+                # python manage.py migrate
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2019/09/02 11:41   fls        1.0         create
+2019/09/15 17:17   fls        1.1         增加访客记录相关
+"""
+
 from django.db import models
 
-
-# Create your models here.
 
 class DrVisitorInfo(models.Model):
     """
@@ -9,7 +23,7 @@ class DrVisitorInfo(models.Model):
     """
 
     VISITOR_TYPE = (
-        ('read', '阅读'),
+        ('read', '阅读'), ('login', '登录'),
     )
 
     id = models.CharField(verbose_name='id', max_length=40, primary_key=True, db_column='id')
@@ -23,6 +37,8 @@ class DrVisitorInfo(models.Model):
     visitor_city = models.CharField(verbose_name="访问者城市", max_length=30, blank=True)
     visitor_addr = models.TextField(verbose_name="访问者位置描述", blank=True, null=True)
     cnt_ipstack = models.IntegerField(verbose_name="解析次数_ipstack", default=0)
+    # 用在登录时
+    exp_time = models.DateTimeField(verbose_name="过期时间", blank=True, null=True)
 
     class Meta:
         db_table = "dr_visitor_info"
@@ -41,4 +57,5 @@ SQL_DIC_VISITOR = {
     "table1_city": DrVisitorInfo.visitor_city.field_name,
     "table1_addr": DrVisitorInfo.visitor_addr.field_name,
     "table1_ipstack": DrVisitorInfo.cnt_ipstack.field_name,
+    "table1_exptime": DrVisitorInfo.exp_time.field_name,
 }

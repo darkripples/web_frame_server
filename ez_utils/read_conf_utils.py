@@ -1,4 +1,15 @@
+# !/usr/bin/env python
 # coding:utf8
+"""
+@Time       :   2019/10/25
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   fls易用性utils-配置文件读取utils
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2019/10/25 15:12     fls        1.0         create
+"""
 
 import configparser
 from .attrdict import AttrDict as fdic

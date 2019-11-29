@@ -1,6 +1,15 @@
+#!/usr/bin/env python
 # coding:utf8
-""" Some Func About 'format date' """
-# 2018/10/31 Add get_day_n()
+"""
+@Time       :   2018/10/31
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   fls易用性utils-日期相关utils
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2018/10/31 11:41   fls        1.0         create
+"""
 
 import datetime
 
@@ -38,16 +47,18 @@ def get_seconds_n(date=datetime.datetime.now(), seconds=0, fmt=FMT_DATETIME_SEPA
     """
     return fmt_date(date=date + datetime.timedelta(seconds=seconds), fmt=fmt)
 
+
 def get_interval_day(start, end, fmt=FMT_DATE):
     """获取日期间的天数(start, end, fmt = '%Y%m%d')
     \t\t@param: start 开始日期
     \t\t@param: end 结束日期
     \t\t@param: fmt 格式化样式
     """
+
     def gen_dates(b_date, days):
         day = datetime.timedelta(days=1)
         for i in range(days):
-            yield b_date + day*i
+            yield b_date + day * i
 
     if start is None:
         return []
@@ -57,9 +68,10 @@ def get_interval_day(start, end, fmt=FMT_DATE):
     else:
         end = datetime.datetime.strptime(end, fmt)
     data = []
-    for d in gen_dates(start, (end-start).days + 1):
+    for d in gen_dates(start, (end - start).days + 1):
         data.append(d.strftime(fmt))
     return data
+
 
 def reformat_date_str(rq1, fmt1, fmt2):
     """按目标格式，重新格式化日期(rq1, fmt1, fmt2)
@@ -68,6 +80,7 @@ def reformat_date_str(rq1, fmt1, fmt2):
     \t\t@param: fmt2 目标格式
     """
     return datetime.datetime.strptime(rq1, fmt1).strftime(fmt2)
+
 
 def help(num='①'):
     print(num + "关于日期时间")

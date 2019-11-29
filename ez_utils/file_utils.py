@@ -1,6 +1,15 @@
+#!/usr/bin/env python
 # coding:utf8
-""" Some Func About 'file' """
-# 2019/5/18
+"""
+@Time       :   2019/5/18
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   fls易用性utils-文件相关utils
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2019/5/18 11:41   fls        1.0         create
+"""
 
 import base64
 import glob

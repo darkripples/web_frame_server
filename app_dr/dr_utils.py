@@ -1,19 +1,27 @@
+#!/usr/bin/env python
 # coding:utf8
-
 """
-# @Time : 2019/9/15 8:43 
-# @Author : fls
-# @Desc: 本应用的utils
+@Time       :   2019/09/15
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   darkripples总平台相关-应用内utils
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2019/09/15 08:43   fls        1.0         create
 """
 
-import uuid, re
+import re
+import uuid
 
-from django.utils import timezone
 from django.conf import settings
+from django.utils import timezone
 
-from ez_utils import connection, after_seconds, is_internal_ip, get_ip
 from conf import REQ_HEADER_PWD
+from ez_utils import connection, after_seconds, is_internal_ip, get_ip, fls_log
 from .models import SQL_DIC_VISITOR, DrVisitorInfo
+
+flog = fls_log(handler_name="app_dr.dr_utils")
 
 
 def add_visitor(ip, app_type, visitor_type, link_id):
@@ -73,7 +81,7 @@ def req_invalid_check(req):
 
     # 其他情况，校验header中的参数
     ip = get_ip(req)
-    if req.META.get("HTTP_TOKEN") == None:
+    if req.META.get("HTTP_TOKEN") is None:
         flag = 1
 
     allowed_hosts = settings.ALLOWED_HOSTS
@@ -87,5 +95,5 @@ def req_invalid_check(req):
     #     flag = 1
 
     if flag:
-        flag = "当前客户端外网IP:{}.请斟酌调取本接口".format(ip)
+        flag = f"当前客户端外网IP:{ip}.请斟酌调取本接口"
     return flag

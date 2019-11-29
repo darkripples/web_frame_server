@@ -1,9 +1,14 @@
+# !/usr/bin/env python
 # coding:utf8
-
 """
-# @Time : 2019/9/15 16:29 
-# @Author : fls
-# @Desc: 位置相关utils.ip、经纬度等
+@Time       :   2019/09/15
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   fls易用性utils-位置相关utils.ip、经纬度等
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2019/09/15 16:29     fls        1.0         create
 """
 
 import requests

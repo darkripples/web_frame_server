@@ -1,5 +1,14 @@
+#!/usr/bin/env python
 # coding:utf8
 """
-blop系统应用相关
+@Time       :   2019/8/30
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   blog相关
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2019/8/30 14:53   fls        1.0         create
 """
-app_name = "app_blog"
+
+default_app_config = "app_blog.apps.AppBlogConfig"

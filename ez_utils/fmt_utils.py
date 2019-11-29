@@ -1,7 +1,14 @@
+#!/usr/bin/env python
 # coding:utf8
 """
-Some Func About 'Format Obj'
-# 2016/6/6 Add fmt_null_obj()
+@Time       :   2016/06/06
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   fls易用性utils-对象格式化相关utils
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2016/06/06 11:41   fls        1.0         create
 """
 
 

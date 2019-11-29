@@ -1,11 +1,16 @@
+#!/usr/bin/env python
 # coding:utf8
-
 """
-## Some Func About 'Write Log'
-## Use: flog or fls_log(log_file)
-# 2016/6/7 Add fls_log()
-# 2019/10/24 重构
-# 2019/11/20 优化 无handler_name的情况
+@Time       :   2016/6/7
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   fls易用性utils-log记录相关
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2016/06/07 11:41   fls        1.0         create
+2019/10/24         fls        2.0         重构
+2019/11/20         fls        2.1         优化 无handler_name的情况
 """
 
 import logging

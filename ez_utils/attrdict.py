@@ -1,6 +1,17 @@
+#!/usr/bin/env python
 # coding:utf8
+"""
+@Time       :   2018/10/31
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   fls易用性utils-属性型字典
+                字典转为属性类
 
-""" 字典转为属性类 """
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2018/10/31 11:41   fls        1.0         create
+"""
+
 import textwrap
 import io as cStringIO
 import copy

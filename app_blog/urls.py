@@ -1,23 +1,23 @@
-"""darkripples URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+#!/usr/bin/env python
+# coding:utf8
 """
+@Time       :   2019/8/30
+@Author     :   fls
+@Contact    :   fls@darkripples.com
+@Desc       :   blog相关
+
+@Modify Time      @Author    @Version    @Desciption
+------------      -------    --------    -----------
+2019/8/30 14:53   fls        1.0         create
+"""
+
 from django.urls import path
 
 from .views import indexList, contentDetail, typeList, titleValue
+from django.apps import apps
+
 # 不可删除
-from . import app_name
+app_name = apps.get_app_config('app_blog').name
 
 urlpatterns = [
     path(r'indexList/', indexList),
