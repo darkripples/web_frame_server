@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # coding:utf8
 """
-@Time       :   2019/8/30
+@Time       :   2019/08/30
 @Author     :   fls
 @Contact    :   fls@darkripples.com
 @Desc       :   fls易用性utils-models:公共返回值类
 
 @Modify Time      @Author    @Version    @Desciption
 ------------      -------    --------    -----------
-2019/8/30 19:53   fls        1.0         create
+2019/08/30 19:53   fls        1.0         create
+2019/11/30 10:17   fls        1.1         增加400、404、500的返回值
 """
 
 
@@ -18,6 +19,10 @@ class ResCode:
         self.succ = 0
         # 业务失败
         self.fail = 1
+        # 请求资源不存在
+        self.err_404 = 2
+        # 请求参数不合法
+        self.err_400 = 3
         # 需要登录(token无效等)
         self.need_login = 8
         # 异常
@@ -41,6 +46,42 @@ class ResModel:
             "msg": self.msg,
             "data": self.data
         }
+
+
+class ResModel404(ResModel):
+    """
+    通用返回值-定义404状态的返回值
+    """
+
+    def __init__(self):
+        self.ResCode = ResCode()
+        self.code = self.ResCode.err_404
+        self.msg = "请求的资源不存在"
+        self.data = {}
+
+
+class ResModel400(ResModel):
+    """
+    通用返回值-定义400状态的返回值
+    """
+
+    def __init__(self):
+        self.ResCode = ResCode()
+        self.code = self.ResCode.err_400
+        self.msg = "请求的参数不合法"
+        self.data = {}
+
+
+class ResModel500(ResModel):
+    """
+    通用返回值-定义500状态的返回值
+    """
+
+    def __init__(self):
+        self.ResCode = ResCode()
+        self.code = self.ResCode.err
+        self.msg = "系统应用异常"
+        self.data = {}
 
 
 class ResPageModel(ResModel):
