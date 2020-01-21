@@ -30,21 +30,25 @@ def fmt_date(date=None, fmt=FMT_DATETIME_SEPARATE):
     return n
 
 
-def get_day_n(date=datetime.datetime.now(), day=1, fmt=FMT_DATETIME_SEPARATE):
+def get_day_n(date=None, day=1, fmt=FMT_DATETIME_SEPARATE):
     """获取n天后或-n天前的日期(date = datetime.datetime.now(), day = 1, fmt = '%Y-%m-%d %H:%M:%S')
     \t\t@param: date 日期,为空则取当前日期
     \t\t@param: day n天后的日期,默认1天后,为负数则取n天前的日期
     \t\t@param: fmt 格式化样式
     """
+    if not date:
+        date = datetime.datetime.now()
     return fmt_date(date=date + datetime.timedelta(days=day), fmt=fmt)
 
 
-def get_seconds_n(date=datetime.datetime.now(), seconds=0, fmt=FMT_DATETIME_SEPARATE):
+def get_seconds_n(date=None, seconds=0, fmt=FMT_DATETIME_SEPARATE):
     """获取n秒后或-n秒前的日期(date = datetime.datetime.now(), seconds = 1, fmt = '%Y-%m-%d %H:%M:%S')
     \t\t@param: date 日期,为空则取当前日期
     \t\t@param: seconds n秒后的时间,默认0秒后,为负数则取n秒前的时间
     \t\t@param: fmt 格式化样式
     """
+    if not date:
+        date = datetime.datetime.now()
     return fmt_date(date=date + datetime.timedelta(seconds=seconds), fmt=fmt)
 
 
