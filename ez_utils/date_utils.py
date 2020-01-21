@@ -19,13 +19,13 @@ FMT_DATE = '%Y%m%d'
 FMT_TIME = '%H%M%S'
 
 
-def fmt_date(date=datetime.datetime.now(), fmt=FMT_DATETIME_SEPARATE):
+def fmt_date(date=None, fmt=FMT_DATETIME_SEPARATE):
     """格式化日期(date = datetime.datetime.now(), fmt = '%Y-%m-%d %H:%M:%S')
     \t\t@param: date 日期,为空则取当前日期
     \t\t@param: fmt 格式化样式
     """
     if not date:
-        return ''
+        date = datetime.datetime.now()
     n = date.strftime(fmt)
     return n
 
