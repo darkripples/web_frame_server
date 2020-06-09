@@ -14,9 +14,7 @@
 from django.http import JsonResponse
 from jwt.exceptions import PyJWTError
 from ez_utils.models import ResModel400, ResModel404, ResModel500
-from ez_utils import fls_log
-
-flog = fls_log(handler_name="")
+from ez_utils import flog
 
 
 def handler_500(exception, req=None):

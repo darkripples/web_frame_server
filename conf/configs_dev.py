@@ -2,6 +2,9 @@
 
 # todo 需自己设置***的参数
 
+# ini配置文件名
+INI_NAME = 'conf.ini'
+
 HOST = '***'
 PORT = 5432
 USER = '***'

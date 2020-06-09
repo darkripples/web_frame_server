@@ -11,7 +11,8 @@
 2018/10/31 11:41   fls        1.0         create
 """
 
-from .fls_log import fls_log
+from .fls_log import log_func
+flog = log_func()
 
 from .attrdict import AttrDict as fdic
 from .fmt_utils import fmt_null_obj as fnull, e_string as fstr, e_int, e_int_money

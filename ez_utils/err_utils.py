@@ -14,7 +14,7 @@
 import os
 import traceback
 
-from ez_utils import fls_log
+from ez_utils import flog
 
 
 def err_check(f):
@@ -28,7 +28,6 @@ def err_check(f):
         try:
             return f(*args, **kwargs)
         except Exception as e:
-            flog = fls_log(handler_name="")
             flog.log_error(os.path.relpath(f.__globals__['__file__']) + "." + f.__name__, traceback.format_exc())
             return None
 

@@ -18,10 +18,8 @@ from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
 from django.apps import apps
 
-from ez_utils import fls_log, match_url
+from ez_utils import flog, match_url
 from ez_utils.models import ResModel
-
-flog = fls_log(handler_name="")
 
 
 def check_token(req_token):

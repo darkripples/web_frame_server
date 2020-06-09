@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding:utf8
 """
-@Time       :   2016/6/7
+@Time       :   2016/06/07
 @Author     :   fls
 @Contact    :   fls@darkripples.com
 @Desc       :   fls易用性utils-log记录相关
@@ -11,113 +11,74 @@
 2016/06/07 11:41   fls        1.0         create
 2019/10/24         fls        2.0         重构
 2019/11/20         fls        2.1         优化 无handler_name的情况
+2019/12/18         fls        2.2         优化引包方式
+2020/06/09         fls        3.0         参考https://www.cnblogs.com/shouke/p/10157798.html改为单例模式
 """
 
-import logging
-import os
-
-from .date_utils import fmt_date, FMT_DATE
-
-
-def _get_msg4log(*args):
-    # Get LOG msg
-    msg = ''
-    try:
-        if len(args) > 1:
-            if "%" in args[0]:
-                msg = args[0] % args[1:]
-            else:
-                msg = ' '.join([str(i) for i in args])
-        elif len(args) == 1:
-            msg = str(args[0])
-        else:
-            msg = ''
-    except:
-        msg = str(args)
-    return msg
+from threading import Lock
+from logging import getLogger, Formatter, StreamHandler
+from logging.handlers import TimedRotatingFileHandler
+from os import path
+from .read_conf_utils import read_conf
+from conf import INI_NAME
 
 
-class FlsLog:
-    # Write LOG
-    def __init__(self, log_filepath=None, file_name=None, date_name=fmt_date(fmt=FMT_DATE)[:8],
-                 handler_name='root', log_level=logging.DEBUG, show_console=True, write_file=True):
-        if not log_filepath:
-            log_filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs")
-        if not os.path.exists(log_filepath):
-            os.makedirs(log_filepath)
-        if not file_name:
-            file_name = "darkripples"
+class FlsLog(object):
+    def __init__(self, log_config_file):
+        pass
 
-        self.log_filepath = os.path.join(log_filepath, file_name + '.log.' + date_name)
+    def __new__(cls, log_config_file):
+        mutex = Lock()
+        # 上锁，防止多线程下出问题
+        mutex.acquire()
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(FlsLog, cls).__new__(cls)
+            # 定义log文件位置
+            # 项目基准路径
+            cls.instance.base_path = path.dirname(path.dirname(path.abspath(__file__)))
+            # log文件路径
+            file_path = path.join(cls.instance.base_path, "logs")
+            # 读取配置文件
+            log_config = read_conf(log_config_file).LOGGING
+            cls.instance.log_filename = path.join(file_path, log_config.logger_name + '.log')
+            cls.instance.fmt = log_config.fmt
+            cls.instance.log_level = int(log_config.log_level)
+            cls.instance.logger_name = log_config.logger_name
+            cls.instance.console_log_on = int(log_config.console_log_on)
+            cls.instance.logfile_log_on = int(log_config.logfile_log_on)
+            cls.instance.logger = getLogger(cls.instance.logger_name)
+            cls.instance.__config_logger()
+        mutex.release()
+        return cls.instance
 
-        self.logger = logging.getLogger(handler_name or "MAIN")
-        self.handlers = self.logger.handlers
+    def get_logger(self):
+        return self.logger
 
-        self.logger.setLevel(log_level)
+    def __config_logger(self):
+        # 设置日志格式
+        fmt = self.fmt.replace('|', '%')
+        formatter = Formatter(fmt)
 
-        # 设置输出日志格式
-        fmt_tmp = "%(asctime)s %(levelname)s %(name)s %(message)s"
-        if not handler_name:
-            # 无handler_name的话，也去掉%(name)s，否则会写为root
-            fmt_tmp = "%(asctime)s %(levelname)s %(message)s"
-        formatter = logging.Formatter(
-            fmt=fmt_tmp,
-            # 时间格式采用默认的，显性记录下datefmt
-            datefmt=None
-        )
+        if self.console_log_on == 1:
+            # 开启控制台日志
+            console = StreamHandler()
+            console.setFormatter(formatter)
+            self.logger.addHandler(console)
 
-        if not self.handlers:
-            if write_file:
-                fh = logging.FileHandler(self.log_filepath, encoding="utf-8")
-                # 为handler指定输出格式
-                fh.setFormatter(formatter)
-                # 为logger添加的日志处理器
-                self.logger.addHandler(fh)
-            if show_console:
-                # 显示控制台输出
-                ch = logging.StreamHandler()
-                # 为handler指定输出格式
-                ch.setFormatter(formatter)
-                # 为logger添加的日志处理器
-                self.logger.addHandler(ch)
+        if self.logfile_log_on == 1:
+            # 开启文件日志
+            rt_file_handler = TimedRotatingFileHandler(self.log_filename, when='D', interval=1, encoding="utf-8")
+            rt_file_handler.setFormatter(formatter)
+            # 设置bak后缀，默认的suffix为 Y-%m-%d_%H-%M-%S
+            rt_file_handler.suffix = "bak.%Y%m%d%H%M%S.log"
+            self.logger.addHandler(rt_file_handler)
 
-            self.handlers = self.logger.handlers
-
-    def log_info(self, *args):
-        # Write info msg
-        self.logger.info(_get_msg4log(*args))
-
-    def log_debug(self, *args):
-        # Write debug msg
-        self.logger.debug(_get_msg4log(*args))
-
-    def log_warning(self, *args):
-        # Write warning msg
-        self.logger.warning(_get_msg4log(*args))
-
-    def log_error(self, *args):
-        # Write error msg
-        self.logger.error(_get_msg4log(*args))
+        self.logger.setLevel(self.log_level)
 
 
-def fls_log(log_filepath=None, file_name='darkripples', handler_name='root', show_console=True, write_file=True):
+def log_func():
     """
-    实例化
-    :param log_filepath:
-    :param file_name:
-    :param handler_name:
-    :param show_console:
-    :param write_file:
+    对外提供的接口
     :return:
     """
-    return FlsLog(log_filepath=log_filepath, file_name=file_name, handler_name=handler_name, show_console=show_console,
-                  write_file=write_file)
-
-
-if __name__ == '__main__':
-    # For test:
-    a = fls_log()
-    a.log_info('11212')
-    a.log_debug('x')
-    a.log_warning('11212')
-    a.log_error('error:%s', 'test')
+    return FlsLog(path.join(path.dirname(path.dirname(path.abspath(__file__))), "conf", INI_NAME)).get_logger()

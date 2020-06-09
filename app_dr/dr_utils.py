@@ -18,10 +18,8 @@ from django.conf import settings
 from django.utils import timezone
 
 from conf import REQ_HEADER_PWD
-from ez_utils import connection, after_seconds, is_internal_ip, get_ip, fls_log
+from ez_utils import connection, after_seconds, is_internal_ip, get_ip, flog
 from .models import SQL_DIC_VISITOR, DrVisitorInfo
-
-flog = fls_log(handler_name="app_dr.dr_utils")
 
 
 def add_visitor(ip, app_type, visitor_type, link_id):

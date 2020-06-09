@@ -19,9 +19,7 @@ from django.apps import apps
 
 from ez_utils.models import ResPageModel, ResModel
 from ez_utils import connection, get_ip
-from ez_utils import fls_log
-
-flog = fls_log(handler_name="app_blog.views")
+from ez_utils import flog
 
 from .models import SQL_DIC_TYPE, SQL_DIC_BLOG, SQL_DIC_PARAM
 
