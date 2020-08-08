@@ -44,6 +44,8 @@ def is_internal_ip(ip):
     :param ip:
     :return:
     """
+    if ip in ('127.0.0.1', '0.0.0.0', 'localhost'):
+        return True
     ip = ip_into_int(ip)
     net_a = ip_into_int('10.255.255.255') >> 24
     net_b = ip_into_int('172.31.255.255') >> 20
