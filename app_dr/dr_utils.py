@@ -11,7 +11,7 @@
 2019/09/15 08:43   fls        1.0         create
 """
 
-import re
+from re import findall
 import uuid
 
 from django.conf import settings
