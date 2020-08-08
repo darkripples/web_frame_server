@@ -96,7 +96,7 @@ class DRMiddleware(MiddlewareMixin):
         :param exception:
         :return:
         """
-        flog.log_error(traceback.format_exc())
+        flog.error(traceback.format_exc())
         print('>>>>>>process_exception>>>>>>>', exception, "|", type(exception))
 
         # 默认返回值Response

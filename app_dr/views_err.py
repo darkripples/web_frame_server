@@ -24,7 +24,7 @@ def handler_500(exception, req=None):
     > 通过中间件dr_middleware.py拦截到的异常，会有req信息
     """
     import traceback
-    flog.log_error(traceback.format_exc())
+    flog.error(traceback.format_exc())
     print('>>>>>>handler_500>>>>>>>', exception, "|", type(exception))
 
     # 默认返回值Response

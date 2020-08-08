@@ -28,7 +28,7 @@ def err_check(f):
         try:
             return f(*args, **kwargs)
         except Exception as e:
-            flog.log_error(os.path.relpath(f.__globals__['__file__']) + "." + f.__name__, traceback.format_exc())
+            flog.error(os.path.relpath(f.__globals__['__file__']) + "." + f.__name__, traceback.format_exc())
             return None
 
     return wrapper

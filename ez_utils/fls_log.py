@@ -18,7 +18,7 @@
 from threading import Lock
 from logging import getLogger, Formatter, StreamHandler
 from logging.handlers import TimedRotatingFileHandler
-from os import path
+from os import path, makedirs
 from .read_conf_utils import read_conf
 from conf import INI_NAME
 
@@ -38,6 +38,8 @@ class FlsLog(object):
             cls.instance.base_path = path.dirname(path.dirname(path.abspath(__file__)))
             # log文件路径
             file_path = path.join(cls.instance.base_path, "logs")
+            if not path.exists(file_path):
+                makedirs(file_path)
             # 读取配置文件
             log_config = read_conf(log_config_file).LOGGING
             cls.instance.log_filename = path.join(file_path, log_config.logger_name + '.log')

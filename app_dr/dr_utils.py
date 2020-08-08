@@ -77,20 +77,30 @@ def req_invalid_check(req):
         # 测试时，传递该密参，不进行校验
         return flag
 
-    # 其他情况，校验header中的参数
+    allowed_hosts = settings.ALLOWED_HOSTS
     ip = get_ip(req)
+
+    # 其他情况，校验header中的参数
     if req.META.get("HTTP_TOKEN") is None:
+        # header中的token必传，可为空字符串
         flag = 1
 
-    allowed_hosts = settings.ALLOWED_HOSTS
+    if flag == "" and not req.is_ajax():
+        # 必须是ajax请求，self.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+        flag = 1
 
     referer_rule = r'//(.*?)/'
-    referer_rs = re.findall(referer_rule, req.META.get("HTTP_REFERER", ""))
-    if (not referer_rs) or (referer_rs[0] not in allowed_hosts):
-        flag = 1
-    # origin_rs = req.META.get("HTTP_ORIGIN", "").split("//")
-    # if (len(origin_rs) < 2) or (origin_rs[1] not in allowed_hosts):
-    #     flag = 1
+    referer_rs = findall(referer_rule, req.META.get("HTTP_REFERER", ""))
+
+    if flag == "":
+        if (not referer_rs) or (referer_rs[0] not in allowed_hosts):
+            flag = 1
+
+    if flag == "":
+        if not is_internal_ip(ip) and (
+                req.META.get("HTTP_HOST", "").replace('www.', '') != referer_rs[0].replace('www.', '')):
+            # 非内网测试ip and header中的host不等于referer中的地址
+            flag = 1
 
     if flag:
         flag = f"当前客户端外网IP:{ip}.请斟酌调取本接口"

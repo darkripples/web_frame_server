@@ -17,11 +17,9 @@ import threading
 
 import psycopg2 as db2api
 
-from conf import configs
+from conf import DB_TYPE, DBNAME as DB_NAME, USER as DB_USER, PWD as DB_PWD, HOST as DB_HOST, PORT as DB_PORT
 from .attrdict import AttrDict
 from .fmt_utils import formatter
-
-DB_TYPE = configs.DB_TYPE
 
 USE_TIMES = 10
 
@@ -53,8 +51,8 @@ def get():
         DB_POOL.conn = None
         DB_POOL.use_times = 0  # 为了避免创建数据库连接失败导致的put异常
         try:
-            DB_POOL.conn = db2api.connect(database=configs.DBNAME, user=configs.USER,
-                                          password=configs.PWD, host=configs.HOST, port=configs.PORT)
+            DB_POOL.conn = db2api.connect(database=DB_NAME, user=DB_USER,
+                                          password=DB_PWD, host=DB_HOST, port=DB_PORT)
 
             DB_POOL.use_times = USE_TIMES or 10  # 若未设置，则按10次
         except:

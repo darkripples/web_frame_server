@@ -99,7 +99,7 @@ def contentDetail(req, id):
         ip = get_ip(req)
         v_cnt = add_visitor(ip, apps.get_app_config('app_blog').name, 'read', id)
     except:
-        flog.log_error("记录访客信息失败:%s", traceback.format_exc())
+        flog.error("记录访客信息失败:%s", traceback.format_exc())
 
     if ret.msg:
         # 请求合法性校验不通过
