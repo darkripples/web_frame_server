@@ -15,7 +15,7 @@
 import textwrap
 import io as cStringIO
 import copy
-from .fmt_utils import formatter
+from .fmt_utils import underline2hump
 
 
 class AttrDict(object):
@@ -35,7 +35,7 @@ class AttrDict(object):
         if initd and hump:
             initd_ = {}
             for k, v in initd.items():
-                initd_[formatter(k)] = v
+                initd_[underline2hump(k)] = v
             initd = initd_
         if nocopy:
             self._dict = initd or {}

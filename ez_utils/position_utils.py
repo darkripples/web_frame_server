@@ -32,6 +32,23 @@ def ip2jwd(ip):
     return [lat, lon]
 
 
+def ip2city(ip):
+    """
+    根据ip地址，获取city
+    :param ip:
+    :return:
+    """
+    try:
+        url = 'http://ip.taobao.com/service/getIpInfo.php?ip={}'.format(ip)
+        response = requests.get(url)
+        js = response.json()
+        city = js.get('data', {}).get('city', '')
+        isp = js.get('data', {}).get('isp', '')
+    except:
+        return '', ''
+    return city, isp
+
+
 def ip_into_int(ip):
     # 先把 192.168.1.13 变成16进制的 c0.a8.01.0d ，再去了“.”后转成10进制的 3232235789 即可。
     # (((((192 * 256) + 168) * 256) + 1) * 256) + 13

@@ -11,28 +11,37 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os, sys
+import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # web root
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATIC_ROOT = 'static'
+UPLOAD_ROOT = 'upload'
+
 # now root
 BASEPATH = os.path.split(__file__)[0]
-STATICPATH = os.path.join(BASE_DIR, 'static')
+
+STATIC_DIR = os.path.join(BASE_DIR, STATIC_ROOT)
 CACHE_DIR = os.path.join(BASE_DIR, 'tmp')
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+
+# 文件上传目录
+UPLOAD_DIR = os.path.join(BASE_DIR, STATIC_ROOT, UPLOAD_ROOT)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ao)k*rjqle#h)@1w1-so%-jbxs4*u7lw(&*ex(k)3b+nwo@6n1'
+SECRET_KEY = 'ao)k*rjfls#h)@1w1-so%-jbxs4*u7lw(&*ex(k)3b+fls@6n1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# because of Nginx，so，this settings may be CAN'T WORK
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.0.105', 'www.darkripples.com', 'localhost']
+# fls:because of Nginx，so，this settings may be CAN'T WORK
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # 设置请求是否允许携带Cookie，必须和xhrFields: {withCredentials: true,}同时使用
 CORS_ALLOW_CREDENTIALS = True
@@ -62,7 +71,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'app_blog',
     'app_dr',
-
 ]
 
 MIDDLEWARE = [
@@ -87,7 +95,7 @@ ROOT_URLCONF = 'darkripples.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(STATICPATH, 'tmpl')],
+        'DIRS': [os.path.join(STATIC_DIR, 'tmpl')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,7 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 TIME_ZONE = 'Asia/Shanghai'
-LANGUAGE_CODE = 'zh_Hans'
+# LANGUAGE_CODE = 'zh_Hans'
 LANGUAGE_CODE = 'zh-hans'
 
 USE_I18N = True
@@ -145,13 +153,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".  
     # Always use forward slashes, even on Windows.  
     # Don't forget to use absolute paths, not relative paths.  
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, '/static/'),
 )
 
 # 设置项是否开启URL访问地址后面不为/跳转至带有/的路径
@@ -163,3 +170,56 @@ CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'
 sys.path.insert(0, os.path.join(BASEPATH))
 
 from conf import DATABASES
+
+# django日志配置.用manage方式启动的话，在DEBUG模式下才显示请求信息
+
+LOGGING = {
+    'version': 1,  # 保留字
+    'disable_existing_loggers': False,  # 是否禁用已经存在的日志实例
+    'formatters': {  # 定义日志的格式
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s'
+        },
+    },
+    'filters': {  # 定义日志的过滤器
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {  # 日志处理程序
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],  # 只有在Django debug为True时才在屏幕打印日志
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {  # 日志实例
+        '': {  # 默认的logger应用如下配置
+            'handlers': [],
+            'level': 'DEBUG',
+            'propagate': True,  # 是否向上一级logger实例传递日志信息
+        },
+        'django.server': {
+            'handlers': [],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+
+    },
+}
+# 控制台是否打印sql
+SHOW_SQL = False
+try:
+    from conf import SHOW_SQL
+except:
+    pass
+if SHOW_SQL:
+    # 开启打印sql的话，因为上面配置了DEBUG必须为True，才打印django的sql
+    DEBUG = True
+    # 增加django的sql日志处理
+    LOGGING['loggers']['django.db.backends'] = {
+        'handlers': ['console'],
+        'propagate': True,
+        'level': 'DEBUG',
+    }

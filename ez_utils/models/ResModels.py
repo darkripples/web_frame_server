@@ -48,6 +48,18 @@ class ResModel:
         }
 
 
+class ResModelToLogin(ResModel):
+    """
+    通用返回值-访问某资源需登录
+    """
+
+    def __init__(self):
+        self.ResCode = ResCode()
+        self.code = self.ResCode.need_login
+        self.msg = "请登录后访问"
+        self.data = {}
+
+
 class ResModel404(ResModel):
     """
     通用返回值-定义404状态的返回值

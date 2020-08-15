@@ -16,3 +16,5 @@ from django.apps import AppConfig
 
 class AppDrConfig(AppConfig):
     name = 'app_dr'
+    # 定义下述url，将校验token
+    check_token_url_list = ('/app_dr/user/*', '/app_dr/menuRole/*',)

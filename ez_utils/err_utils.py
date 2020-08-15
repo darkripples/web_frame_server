@@ -11,8 +11,8 @@
 2019/8/30 23:12    fls        1.0         create
 """
 
-import os
-import traceback
+from os import path
+from traceback import format_exc
 
 from ez_utils import flog
 
@@ -28,7 +28,7 @@ def err_check(f):
         try:
             return f(*args, **kwargs)
         except Exception as e:
-            flog.error(os.path.relpath(f.__globals__['__file__']) + "." + f.__name__, traceback.format_exc())
+            flog.error(path.relpath(f.__globals__['__file__']) + "." + f.__name__ + repr( format_exc()))
             return None
 
     return wrapper

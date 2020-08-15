@@ -13,8 +13,11 @@
 2019/09/02 11:41   fls        1.0         create
 2019/09/15 17:17   fls        1.1         增加访客记录相关
 """
-
 from django.db import models
+
+from app_dr.user.models import *
+#from app_dr.wechat.models import *
+from app_dr.menu_role.models import *
 
 
 class DrVisitorInfo(models.Model):
@@ -23,7 +26,7 @@ class DrVisitorInfo(models.Model):
     """
 
     VISITOR_TYPE = (
-        ('read', '阅读'), ('login', '登录'),
+        ('read', '阅读'), ('login', '登录'), ('bad', '恶意的'), ('survey', '问卷类'),
     )
 
     id = models.CharField(verbose_name='id', max_length=40, primary_key=True, db_column='id')
@@ -32,13 +35,16 @@ class DrVisitorInfo(models.Model):
     visitor_type = models.CharField(verbose_name='访客类型', choices=VISITOR_TYPE, max_length=10, blank=True)
     link_id = models.CharField(verbose_name='关联id', max_length=40, blank=True)
     visitor_ip = models.CharField(verbose_name="访问者ip", max_length=20, blank=True)
-    visitor_lat = models.CharField(verbose_name="访问者纬度", max_length=30, blank=True)
-    visitor_lng = models.CharField(verbose_name="访问者经度", max_length=30, blank=True)
-    visitor_city = models.CharField(verbose_name="访问者城市", max_length=30, blank=True)
+    visitor_lat = models.CharField(verbose_name="访问者纬度", max_length=30, blank=True, null=True)
+    visitor_lng = models.CharField(verbose_name="访问者经度", max_length=30, blank=True, null=True)
+    visitor_city = models.CharField(verbose_name="访问者城市", max_length=50, blank=True, null=True)
     visitor_addr = models.TextField(verbose_name="访问者位置描述", blank=True, null=True)
+    visitor_isp = models.CharField(verbose_name="访问者运营商", max_length=50, blank=True, null=True)
     cnt_ipstack = models.IntegerField(verbose_name="解析次数_ipstack", default=0)
-    # 用在登录时
+    cnt_iptaobao = models.IntegerField(verbose_name="解析次数_iptaobao", default=0)
+    # 用在登录时?
     exp_time = models.DateTimeField(verbose_name="过期时间", blank=True, null=True)
+    bz = models.TextField(verbose_name="备注", blank=True, null=True)
 
     class Meta:
         db_table = "dr_visitor_info"
@@ -56,6 +62,9 @@ SQL_DIC_VISITOR = {
     "table1_lng": DrVisitorInfo.visitor_lng.field_name,
     "table1_city": DrVisitorInfo.visitor_city.field_name,
     "table1_addr": DrVisitorInfo.visitor_addr.field_name,
+    "table1_isp": DrVisitorInfo.visitor_isp.field_name,
     "table1_ipstack": DrVisitorInfo.cnt_ipstack.field_name,
+    "table1_iptaobao": DrVisitorInfo.cnt_iptaobao.field_name,
     "table1_exptime": DrVisitorInfo.exp_time.field_name,
+    "table1_bz": DrVisitorInfo.bz.field_name,
 }

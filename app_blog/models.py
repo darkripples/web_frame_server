@@ -63,11 +63,30 @@ class BlogContent(models.Model):
     bg_url = models.TextField(verbose_name="背景图", blank=True, null=True)
     auth_account = models.CharField(verbose_name="作者用户名", max_length=50, blank=True)
     auth_name = models.CharField(verbose_name="作者姓名", max_length=50, blank=True)
+    upd_account = models.CharField(verbose_name="更新人用户名", max_length=50, blank=True)
+    upd_name = models.CharField(verbose_name="更新人姓名", max_length=50, blank=True)
     add_time = models.DateTimeField(verbose_name="添加时间", blank=True, null=True)
     upd_time = models.DateTimeField(verbose_name="修改时间", blank=True, null=True)
 
     class Meta:
         db_table = "blog_content"
+
+
+class BlogContentComment(models.Model):
+    """
+    blog内容评论记录
+    """
+    id = models.CharField(verbose_name='id', max_length=40, primary_key=True, db_column='id')
+    blog_id = models.CharField(verbose_name="blog的id", max_length=40, db_index=True)
+    user_id = models.CharField(verbose_name="用户id", max_length=40, db_index=True, blank=True, null=True)
+    user_account = models.CharField(verbose_name="用户名", max_length=50, blank=True, null=True)
+    user_name = models.CharField(verbose_name="姓名", max_length=50, blank=True, null=True)
+
+    is_del = models.CharField(verbose_name="是否被删除", max_length=1, db_index=True)
+    add_time = models.DateTimeField(verbose_name="添加时间", blank=True, null=True)
+
+    class Meta:
+        db_table = "blog_content_comment"
 
 
 SQL_DIC_TYPE = {
@@ -81,12 +100,15 @@ sql_dic1 = {"table1": BlogContent._meta.db_table,
             "table1_tags": BlogContent.blog_tags.field_name,
             "table1_notes": BlogContent.title_notes.field_name,
             "table1_type_id": BlogContent.blog_type.field_name,
+            "table1_aacc": BlogContent.auth_account.field_name,
             "table1_aname": BlogContent.auth_name.field_name,
             "table1_atime": BlogContent.add_time.field_name,
             "table1_rcnt": BlogContent.read_cnt.field_name,
             "table1_rlevel": BlogContent.read_level.field_name,
             "table1_content": BlogContent.content.field_name,
             "table1_bgurl": BlogContent.bg_url.field_name,
+            "table1_uacc": BlogContent.upd_account.field_name,
+            "table1_uname": BlogContent.upd_name.field_name,
             }
 SQL_DIC_PARAM = {
     "table1": BlogParam._meta.db_table,

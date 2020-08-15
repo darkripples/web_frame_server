@@ -15,6 +15,7 @@
 from django.urls import path, include
 
 urlpatterns = [
+    # 加载各个模块，必须app_开头
     # 主平台
     path(r'app_dr/', include('app_dr.urls', namespace='app_dr')),
     # blog

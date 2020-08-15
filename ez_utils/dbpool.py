@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # coding:utf8
 """
-@Time       :   2015/5/24
+@Time       :   2015/05/24
 @Author     :   fls
 @Contact    :   fls@darkripples.com
 @Desc       :   fls易用性utils-数据库连接池相关utils
 
 @Modify Time      @Author    @Version    @Desciption
 ------------      -------    --------    -----------
-2015/5/24 10:25   fls        1.0         create
+2015/05/24 10:25   fls        1.0         create
+2020/08/15 07:56   fls        1.1         优化sql打印配置
 """
 
 import _thread
@@ -17,9 +18,16 @@ import threading
 
 import psycopg2 as db2api
 
-from conf import DB_TYPE, DBNAME as DB_NAME, USER as DB_USER, PWD as DB_PWD, HOST as DB_HOST, PORT as DB_PORT
+from conf import DB_TYPE, DB_NAME, DB_USER, DB_PWD, DB_HOST, DB_PORT
 from .attrdict import AttrDict
-from .fmt_utils import formatter
+from .fmt_utils import underline2hump
+from .date_utils import fmt_date
+
+SHOW_SQL = False
+try:
+    from conf import SHOW_SQL
+except:
+    pass
 
 USE_TIMES = 10
 
@@ -179,6 +187,8 @@ class DBConnection(object):
             # 替换SQL百分号为冒号形式：%( id )s, %( ywbm)s --> :id, :ywbm
             sql = re.sub(r'%\(\s*(.+?)\s*\)s', r':\1', sql)
 
+        if SHOW_SQL:
+            print(fmt_date(), '\t', sql, ';\targs=', params)
         kind = sql.strip()[:6].lower()
         if kind != 'select':
             if params and isinstance(params, dict):
@@ -189,7 +199,7 @@ class DBConnection(object):
         else:
             # 剩下的全是查询
             sql_page = ""
-            if page != None:
+            if page is not None:
                 sql_page = " limit {0} offset {1}".format(limit, (int(page) - 1) * int(limit))
             rs = sql_execute(cur, sql + sql_page, params, hump=hump)
             rs = rs.fetchall()
@@ -352,7 +362,7 @@ class ResultSet(object):
         d = {}
         for key, i in self.fields.items():
             if self.hump:
-                d[formatter(key)] = self.item[i]
+                d[underline2hump(key)] = self.item[i]
             else:
                 d[key] = self.item[i]
         return d

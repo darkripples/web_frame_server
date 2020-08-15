@@ -16,3 +16,5 @@ from django.apps import AppConfig
 
 class AppBlogConfig(AppConfig):
     name = 'app_blog'
+    # 定义下述url，将校验token
+    check_token_url_list = ('/app_blog/saveObj', '/app_blog/delObj',)

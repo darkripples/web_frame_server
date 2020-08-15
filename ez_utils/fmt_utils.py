@@ -9,7 +9,10 @@
 @Modify Time      @Author    @Version    @Desciption
 ------------      -------    --------    -----------
 2016/06/06 11:41   fls        1.0         create
+2020/08/14 11:40   fls        1.1         规范下划线转驼峰func命名、新增驼峰转下划线func命名
 """
+
+from re import sub, compile
 
 
 def __check_null(v):
@@ -116,30 +119,41 @@ def __test_2_fmt_null_obj():
     print(new_)
 
 
-def __test_2_fmt_date():
-    # Test for fmt_date()
-    a = fmt_date(fmt='%Y-%m-%d')
-    import sys
-    print(sys.argv)
-    fmt = sys.argv[-1] if len(sys.argv) == 2 else '%Y-%m-%d'
-    a = fmt_date(fmt=fmt)
-    print(a)
-
-
-def formatter(src: str, firstUpper: bool = False):
+def underline2hump(src: str, firstUpper: bool = False):
     """
     将下划线分隔的名字,转换为驼峰模式
     :param src:
-    :param firstUpper: 转换后的首字母是否指定大写(如
+    :param firstUpper: 转换后的首字母是否指定大写
     :return:
     """
-    arr = src.split('_')
-    res = ''
-    for i in arr:
-        res = res + i[0].upper() + i[1:]
+    # arr = src.split('_')
+    # res = ''
+    # for i in arr:
+    #     res = res + i[0].upper() + i[1:]
+    #
+    # if not firstUpper:
+    #     res = res[0].lower() + res[1:]
+    # return res
 
-    if not firstUpper:
-        res = res[0].lower() + res[1:]
+    # 这里re.sub()函数第二个替换参数用到了一个匿名回调函数，回调函数的参数x为一个匹配对象，返回值为一个处理后的字符串
+    res = sub(r'(_\w)', lambda x: x.group(1)[1].upper(), src)
+    if firstUpper:
+        res = res[0].upper() + res[1:]
+    return res
+
+
+def hump2underline(hump_str: str):
+    """
+    驼峰格式转为下划线模式
+    :param hump_str:
+    :return:
+    """
+    if not hump_str:
+        return ""
+    # 匹配正则，匹配小写字母和大写字母的分界位置
+    p = compile(r'([a-z]|\d)([A-Z])')
+    # 这里第二个参数使用了正则分组的后向引用
+    res = sub(p, r'\1_\2', hump_str).lower()
     return res
 
 
@@ -164,4 +178,4 @@ def help(num='①'):
 if __name__ == '__main__':
     # For test:
     # __test_2_fmt_null_obj()
-    __test_2_fmt_date()
+    pass
