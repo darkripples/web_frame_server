@@ -105,3 +105,4 @@ venv.bak/
 /.idea
 /conf/configs.py
 /conf/configs_local.py
+/logs
