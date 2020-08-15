@@ -8,7 +8,7 @@ pip3 install django-cors-headers
 pip3 install uwsgi
 pip3 install psycopg2
 ```
-## 添加应用1-blog 
+## 添加应用-blog 
 
 当前项目有个blog应用(dr应用为底层共同模块)
 > 1.只有blog的查看相关api 
@@ -113,7 +113,11 @@ server {
 ```
 > 6.后端地址为：
 http://127.0.0.1:8000/dr/manage/index.html
+用户名：super_admin
+密码： 123456
 
+## todo
+后台新增时，还未关联到markdown实时预览  
 ## Log
  * 2019-02-02  
  > 初始化应用  
